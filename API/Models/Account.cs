@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace API.Models
 {
     [Table("tb_m_accounts")]
-    public class Account
+    public class Account : BaseEntity
     {
+
         [Column("password", TypeName = "nvarchar(255)")]
         public string Password { get; set; }
         [Column("is_deleted", TypeName = "bit")]
@@ -18,5 +19,7 @@ namespace API.Models
         public DateTime ExpiredTime { get; set; }
 
         public ICollection<AccountRole> AccountRoles{ get; set; }
+        public Employee Employee { get; set; }
+        public ICollection<Employee> Employees { get; set; }
     }
 }

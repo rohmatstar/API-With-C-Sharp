@@ -16,6 +16,7 @@ namespace API.Models
         public Guid UniversityGuid { get; set; }
 
         // Cardinality
-        public University University { get; set; }
+        public University? Universities { get; set; }
+        public Employee? Employees { get; set; }
     }
 }

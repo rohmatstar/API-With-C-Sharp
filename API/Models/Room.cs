@@ -12,5 +12,8 @@ namespace API.Models
         public int Floor { get; set; }
         [Column("capacity")]
         public int Capacity { get; set; }
+
+        public Booking? Bookings { get; set; }
+        public ICollection<Booking> Booking { get; set; }
     }
 }
