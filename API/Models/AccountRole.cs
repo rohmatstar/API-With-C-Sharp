@@ -1,18 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.Models
+namespace API.Models;
+
+[Table("tb_tr_account_roles")]
+public class AccountRole : BaseEntity
 {
+    [Column("account_guid")]
+    public Guid AccountGuid { get; set; }
 
-    [Table("tb_tr_account_roles")]
-    public class AccountRole : BaseEntity
-    {
-        [Column("account_guid")]
-        public Guid AccountGuid { get; set; }
-        [Column("role_guid")]
-        public Guid RoleGuid { get; set; }
+    [Column("role_guid")]
+    public Guid RoleGuid { get; set; }
 
-        public Account? Accounts { get; set; }
-        public Role? Roles { get; set; }
-    }
+    // Cardinality
+    public Account? Account { get; set; }
+    public Role? Role { get; set; }
 }

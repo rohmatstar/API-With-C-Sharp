@@ -5,10 +5,7 @@ namespace API.Data;
 
 public class BookingDbContext : DbContext
 {
-    public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options)
-    {
-
-    }
+    public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options) { }
 
     // Table
     public DbSet<Account> Accounts { get; set; }
@@ -26,12 +23,6 @@ public class BookingDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Constraints Unique
-        modelBuilder.Entity<Booking>()
-                    .HasIndex(b => new {
-                        b.RoomGuid,
-                        b.EmployeeGuid
-                    }).IsUnique();
-
         modelBuilder.Entity<Employee>()
                     .HasIndex(e => new {
                         e.Nik,
@@ -39,60 +30,40 @@ public class BookingDbContext : DbContext
                         e.PhoneNumber
                     }).IsUnique();
 
-        modelBuilder.Entity<AccountRole>()
-                    .HasIndex(a => new {
-                        a.AccountGuid,
-                        a.RoleGuid
-                    }).IsUnique();
-
-
+        // Relation between Education and University (1 to Many)
         modelBuilder.Entity<Education>()
-                    .HasIndex(ed => new {
-                        ed.UniversityGuid
-                    }).IsUnique();
+                    .HasOne(e => e.University)
+                    .WithMany(u => u.Educations)
+                    .HasForeignKey(e => e.UniversityGuid);
 
-        // Account - Account Role (One to Many)
+        // Relation between Education and Employee (1 to 1)
+        modelBuilder.Entity<Education>()
+                    .HasOne(e => e.Employee)
+                    .WithOne(e => e.Education)
+                    .HasForeignKey<Education>(e => e.Guid);
+
+        // Relation between Account and Employee (1 to 1)
         modelBuilder.Entity<Account>()
-                    .HasMany(account => account.AccountRoles)
-                    .WithOne(accountRoles => accountRoles.Accounts)
-                    .HasForeignKey(accountRoles => accountRoles.AccountGuid);
-                    // .OnDelete(DeleteBehavior.Cascade);
+                    .HasOne(a => a.Employee)
+                    .WithOne(e => e.Account)
+                    .HasForeignKey<Account>(a => a.Guid);
 
-        // University - Education (One to Many)
-        modelBuilder.Entity<University>()
-                    .HasMany(university => university.Educations)
-                    .WithOne(education => education.Universities)
-                    .HasForeignKey(education => education.UniversityGuid);
+        // Relation between Account and AccountRole (1 to Many)
+        modelBuilder.Entity<AccountRole>()
+                    .HasOne(a => a.Account)
+                    .WithMany(a => a.AccountRoles)
+                    .HasForeignKey(a => a.AccountGuid);
 
-        // Role - Account Role (One to Many)
-        modelBuilder.Entity<Role>()
-                    .HasMany(role => role.AccountRoles)
-                    .WithOne(accountRole => accountRole.Roles)
-                    .HasForeignKey(accountRole => accountRole.RoleGuid);
+        // Relation between Role and AccountRole (1 to Many)
+        modelBuilder.Entity<AccountRole>()
+                    .HasOne(a => a.Role)
+                    .WithMany(r => r.AccountRoles)
+                    .HasForeignKey(a => a.RoleGuid);
 
-        // Employee - Account (One to One)
-        modelBuilder.Entity<Employee>()
-                    .HasOne(employee => employee.Accounts)
-                    .WithOne(account => account.Employee)
-                    .HasForeignKey<Account>(account => account.Guid);
-
-        // Employee - Education (One to One)
-        modelBuilder.Entity<Employee>()
-                    .HasOne(employee => employee.Educations)
-                    .WithOne(education => education.Employees)
-                    .HasForeignKey<Education>(education => education.Guid);
-
-        // Employee - Booking (One to Many)
-        modelBuilder.Entity<Employee>()
-                    .HasMany(employee => employee.Booking)
-                    .WithOne(booking => booking.Employee)
-                    .HasForeignKey(booking => booking.EmployeeGuid);
-
-        // Room - Booking (One to Many)
-        modelBuilder.Entity<Room>()
-                    .HasMany(room => room.Booking)
-                    .WithOne(booking => booking.Room)
-                    .HasForeignKey(booking => booking.RoomGuid);
-
+        // Relation between Booking and Room (1 to Many)
+        modelBuilder.Entity<Booking>()
+                    .HasOne(b => b.Room)
+                    .WithMany(r => r.Bookings)
+                    .HasForeignKey(b => b.RoomGuid);
     }
 }
