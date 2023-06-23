@@ -6,11 +6,11 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[Controller]")]
-public class UniversityController : ControllerBase
+public class AccountRoleController : ControllerBase
 {
-    private readonly IUniversityRepository _repository;
+    private readonly IAccountRoleRepository _repository;
 
-    public UniversityController(IUniversityRepository repository)
+    public AccountRoleController(IAccountRoleRepository repository)
     {
         _repository = repository;
     }
@@ -18,39 +18,39 @@ public class UniversityController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var universities = _repository.GetAll();
+        var univerities = _repository.GetAll();
 
-        if (!universities.Any())
+        if (!univerities.Any())
         {
             return NotFound();
         }
 
-        return Ok(universities);
+        return Ok(univerities);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var university = _repository.GetByGuid(guid);
-        if (university is null)
+        var accountRole = _repository.GetByGuid(guid);
+        if (accountRole is null)
         {
             return NotFound();
         }
 
-        return Ok(university);
+        return Ok(accountRole);
     }
 
     [HttpPost]
-    public IActionResult Create(University university)
+    public IActionResult Create(AccountRole accountRole)
     {
-        var createdUniversity = _repository.Create(university);
-        return Ok(createdUniversity);
+        var createdAccountRole = _repository.Create(accountRole);
+        return Ok(createdAccountRole);
     }
 
     [HttpPut]
-    public IActionResult Update(University university)
+    public IActionResult Update(AccountRole accountRole)
     {
-        var isUpdated = _repository.Update(university);
+        var isUpdated = _repository.Update(accountRole);
         if (!isUpdated)
         {
             return NotFound();

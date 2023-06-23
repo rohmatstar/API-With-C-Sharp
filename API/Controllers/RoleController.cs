@@ -6,11 +6,11 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[Controller]")]
-public class UniversityController : ControllerBase
+public class RoleController : ControllerBase
 {
-    private readonly IUniversityRepository _repository;
+    private readonly IRoleRepository _repository;
 
-    public UniversityController(IUniversityRepository repository)
+    public RoleController(IRoleRepository repository)
     {
         _repository = repository;
     }
@@ -18,39 +18,39 @@ public class UniversityController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var universities = _repository.GetAll();
+        var roles = _repository.GetAll();
 
-        if (!universities.Any())
+        if (!roles.Any())
         {
             return NotFound();
         }
 
-        return Ok(universities);
+        return Ok(roles);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var university = _repository.GetByGuid(guid);
-        if (university is null)
+        var role = _repository.GetByGuid(guid);
+        if (role is null)
         {
             return NotFound();
         }
 
-        return Ok(university);
+        return Ok(role);
     }
 
     [HttpPost]
-    public IActionResult Create(University university)
+    public IActionResult Create(Role role)
     {
-        var createdUniversity = _repository.Create(university);
-        return Ok(createdUniversity);
+        var createdRole = _repository.Create(role);
+        return Ok(createdRole);
     }
 
     [HttpPut]
-    public IActionResult Update(University university)
+    public IActionResult Update(Role role)
     {
-        var isUpdated = _repository.Update(university);
+        var isUpdated = _repository.Update(role);
         if (!isUpdated)
         {
             return NotFound();
