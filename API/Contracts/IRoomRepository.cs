@@ -1,12 +1,8 @@
 ﻿using API.Models;
 
-namespace API.Contracts;
-
-public interface IRoomRepository
+namespace API.Contracts
 {
-    ICollection<Room> GetAll();
-    Room? GetByGuid(Guid guid);
-    Room Create(Room room);
-    bool Update(Room room);
-    bool Delete(Guid guid);
+    public interface IRoomRepository : IGeneralRepository<Room>
+    {
+    }
 }

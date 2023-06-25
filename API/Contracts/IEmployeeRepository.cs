@@ -1,12 +1,8 @@
 ﻿using API.Models;
 
-namespace API.Contracts;
-
-public interface IEmployeeRepository
+namespace API.Contracts
 {
-    ICollection<Employee> GetAll();
-    Employee? GetByGuid(Guid guid);
-    Employee Create(Employee employee);
-    bool Update(Employee employee);
-    bool Delete(Guid guid);
+    public interface IEmployeeRepository : IGeneralRepository<Employee>
+    {
+    }
 }

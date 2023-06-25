@@ -1,12 +1,8 @@
 ﻿using API.Models;
 
-namespace API.Contracts;
-
-public interface IEducationRepository
+namespace API.Contracts
 {
-    ICollection<Education> GetAll();
-    Education? GetByGuid(Guid guid);
-    Education Create(Education education);
-    bool Update(Education education);
-    bool Delete(Guid guid);
+    public interface IEducationRepository : IGeneralRepository<Education>
+    {
+    }
 }
