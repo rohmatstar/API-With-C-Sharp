@@ -1,8 +1,8 @@
 ﻿using API.Models;
 
-namespace API.Contracts
+namespace API.Contracts;
+
+public interface IEducationRepository : IGeneralRepository<Education>
 {
-    public interface IEducationRepository : IGeneralRepository<Education>
-    {
-    }
+    IEnumerable<Education> GetByName(string name);
 }
