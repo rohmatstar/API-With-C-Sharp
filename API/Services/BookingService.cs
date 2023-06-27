@@ -60,7 +60,7 @@ public class BookingService
         var booking = new Booking
         {
             StartDate = newBookingDto.StartDate,
-            EndDate = newBookingDto.EndDate,
+            EndDate = (DateTime)newBookingDto.EndDate,
             Status = newBookingDto.Status,
             remarks = newBookingDto.remarks,
             Guid = new Guid(),
@@ -100,7 +100,7 @@ public class BookingService
         {
             Guid = updateBookingDto.Guid,
             StartDate = updateBookingDto.StartDate,
-            EndDate = updateBookingDto.EndDate,
+            EndDate = (DateTime)updateBookingDto.EndDate,
             Status = updateBookingDto.Status,
             remarks = updateBookingDto.remarks,
             ModifiedDate = DateTime.Now,

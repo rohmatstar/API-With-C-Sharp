@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
 using API.Models;
+using API.Utilities;
 
 namespace API.Services;
 
@@ -60,7 +61,7 @@ public class AccountService
     {
         var account = new Account
         {
-            Password = newAccountDto.Password,
+            Password = Hashing.HashPassword(newAccountDto.Password),
             IsDeleted = newAccountDto.IsDeleted,
             Otp = newAccountDto.Otp,
             IsUsed = newAccountDto.IsUsed,
@@ -102,11 +103,11 @@ public class AccountService
         var account = new Account
         {
             Guid = updateAccountDto.Guid,
-            Password = updateAccountDto.Password,
-            IsDeleted = updateAccountDto.IsDeleted,
-            Otp = updateAccountDto.Otp,
-            IsUsed = updateAccountDto.IsUsed,
-            ExpiredTime = updateAccountDto.ExpiredTime,
+            Password = Hashing.HashPassword(updateAccountDto.Password),
+            IsDeleted = (bool)updateAccountDto.IsDeleted,
+            Otp = (int)updateAccountDto.Otp,
+            IsUsed = (bool)updateAccountDto.IsUsed,
+            ExpiredTime = (DateTime)updateAccountDto.ExpiredTime,
             ModifiedDate = DateTime.Now,
             CreatedDate = getAccount!.CreatedDate
         };

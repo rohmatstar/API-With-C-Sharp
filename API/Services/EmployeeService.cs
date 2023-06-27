@@ -2,6 +2,7 @@
 using API.DTOs.Employees;
 using API.Models;
 using API.Utilities.Enums;
+using System.Xml.Linq;
 
 namespace API.Services;
 
@@ -90,9 +91,17 @@ public class EmployeeService
 
     public GetEmployeeDto? CreateEmployee(NewEmployeeDto newEmployeeDto)
     {
+        // Generate NIK
+        var Nik = _employeeRepository.GetAll().LastOrDefault().Nik;
+        int InitNik = 11111;
+        if (Nik != null)
+        {
+            InitNik = Convert.ToInt32(Nik) + 1;
+        }
+
         var employee = new Employee
         {
-            Nik = newEmployeeDto.Nik,
+            Nik = InitNik.ToString(),
             FirstName = newEmployeeDto.FirstName,
             LastName = newEmployeeDto.LastName,
             BirthDate = newEmployeeDto.BirthDate,
