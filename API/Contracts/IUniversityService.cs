@@ -4,5 +4,5 @@ namespace API.Contracts;
 
 public interface IUniversityService
 {
-    IEnumerable<GetEducationDto> GetUniversity();
+    IEnumerable<GetUniversityDto> GetUniversity();
 }

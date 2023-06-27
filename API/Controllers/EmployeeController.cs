@@ -1,5 +1,5 @@
 ﻿using API.Contracts;
-using API.DTOs.Educations;
+using API.DTOs.Employees;
 using API.Models;
 using API.Services;
 using API.Utilities.Enums;
@@ -11,11 +11,11 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class EducationController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
-        private readonly EducationService _service;
+        private readonly EmployeeService _service;
 
-        public EducationController(EducationService service)
+        public EmployeeController(EmployeeService service)
         {
             _service = service;
         }
@@ -23,11 +23,11 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var entities = _service.GetEducation();
+            var entities = _service.GetEmployee();
 
-            if (entities is null)
+            if (!entities.Any())
             {
-                return NotFound(new ResponseHandler<GetEducationDto>
+                return NotFound(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -35,7 +35,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<IEnumerable<GetEducationDto>>
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -47,10 +47,10 @@ namespace API.Controllers
         [HttpGet("{guid}")]
         public IActionResult GetByGuid(Guid guid)
         {
-            var education = _service.GetEducation(guid);
-            if (education is null)
+            var employee = _service.GetEmployee(guid);
+            if (employee is null)
             {
-                return NotFound(new ResponseHandler<GetEducationDto>
+                return NotFound(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -58,22 +58,22 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<GetEducationDto>
+            return Ok(new ResponseHandler<GetEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Data found",
-                Data = education
+                Data = employee
             });
         }
 
         [HttpPost]
-        public IActionResult Create(NewEducationDto newEducationDto)
+        public IActionResult Create(NewEmployeeDto newEmployeeDto)
         {
-            var createdEducation = _service.CreateEducation(newEducationDto);
-            if (createdEducation is null)
+            var createdEmployee = _service.CreateEmployee(newEmployeeDto);
+            if (createdEmployee is null)
             {
-                return BadRequest(new ResponseHandler<GetEducationDto>
+                return BadRequest(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status400BadRequest,
                     Status = HttpStatusCode.BadRequest.ToString(),
@@ -81,22 +81,22 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<GetEducationDto>
+            return Ok(new ResponseHandler<GetEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Successfully created",
-                Data = createdEducation
+                Data = createdEmployee
             });
         }
 
         [HttpPut]
-        public IActionResult Update(UpdateEducationDto updateEducationDto)
+        public IActionResult Update(UpdateEmployeeDto updateEmployeeDto)
         {
-            var update = _service.UpdateEducation(updateEducationDto);
+            var update = _service.UpdateEmployee(updateEmployeeDto);
             if (update is -1)
             {
-                return NotFound(new ResponseHandler<UpdateEducationDto>
+                return NotFound(new ResponseHandler<UpdateEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -105,14 +105,14 @@ namespace API.Controllers
             }
             if (update is 0)
             {
-                return BadRequest(new ResponseHandler<UpdateEducationDto>
+                return BadRequest(new ResponseHandler<UpdateEmployeeDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
                     Message = "Check your data"
                 });
             }
-            return Ok(new ResponseHandler<UpdateEducationDto>
+            return Ok(new ResponseHandler<UpdateEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -123,11 +123,11 @@ namespace API.Controllers
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var delete = _service.DeleteEducation(guid);
+            var delete = _service.DeleteEmployee(guid);
 
             if (delete is -1)
             {
-                return NotFound(new ResponseHandler<GetEducationDto>
+                return NotFound(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -136,7 +136,7 @@ namespace API.Controllers
             }
             if (delete is 0)
             {
-                return BadRequest(new ResponseHandler<GetEducationDto>
+                return BadRequest(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -144,7 +144,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<GetEducationDto>
+            return Ok(new ResponseHandler<GetEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -155,23 +155,23 @@ namespace API.Controllers
         [HttpGet("search/{name}")]
         public IActionResult GetByName(string name)
         {
-            var universities = _service.GetEducation(name);
-            if (!universities.Any())
+            var employees = _service.GetEmployee(name);
+            if (!employees.Any())
             {
-                return NotFound(new ResponseHandler<GetEducationDto>
+                return NotFound(new ResponseHandler<GetEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "No universities found with the given name"
+                    Message = "No employees found with the given name"
                 });
             }
 
-            return Ok(new ResponseHandler<IEnumerable<GetEducationDto>>
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "Universities found",
-                Data = universities
+                Message = "Employees found",
+                Data = employees
             });
         }
     }

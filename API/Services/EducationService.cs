@@ -24,6 +24,7 @@ public class EducationService
         var toDto = educations.Select(education =>
                                             new GetEducationDto
                                             {
+                                                Guid = education.Guid,
                                                 Major = education.Major,
                                                 Degree = education.Degree,
                                                 Gpa = education.Gpa
@@ -89,7 +90,6 @@ public class EducationService
 
         var toDto = new GetEducationDto
         {
-            Guid = createdEducation.Guid,
             Major = createdEducation.Major,
             Degree = createdEducation.Degree,
             Gpa = createdEducation.Gpa

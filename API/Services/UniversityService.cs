@@ -13,7 +13,7 @@ public class UniversityService
         _universityRepository = universityRepository;
     }
 
-    public IEnumerable<GetEducationDto>? GetUniversity()
+    public IEnumerable<GetUniversityDto>? GetUniversity()
     {
         var universities = _universityRepository.GetAll();
         if (!universities.Any())
@@ -22,7 +22,7 @@ public class UniversityService
         }
 
         var toDto = universities.Select(university =>
-                                            new GetEducationDto
+                                            new GetUniversityDto
                                             {
                                                 Guid = university.Guid,
                                                 Code = university.Code,
@@ -32,7 +32,7 @@ public class UniversityService
         return toDto; // Universities found
     }
 
-    public IEnumerable<GetEducationDto>? GetUniversity(string name)
+    public IEnumerable<GetUniversityDto>? GetUniversity(string name)
     {
         var universities = _universityRepository.GetByName(name);
         if (!universities.Any())
@@ -41,7 +41,7 @@ public class UniversityService
         }
 
         var toDto = universities.Select(university =>
-                                            new GetEducationDto
+                                            new GetUniversityDto
                                             {
                                                 Guid = university.Guid,
                                                 Code = university.Code,
@@ -51,7 +51,7 @@ public class UniversityService
         return toDto; // Universities found
     }
 
-    public GetEducationDto? GetUniversity(Guid guid)
+    public GetUniversityDto? GetUniversity(Guid guid)
     {
         var university = _universityRepository.GetByGuid(guid);
         if (university is null)
@@ -59,7 +59,7 @@ public class UniversityService
             return null; // University not found
         }
 
-        var toDto = new GetEducationDto
+        var toDto = new GetUniversityDto
         {
             Guid = university.Guid,
             Code = university.Code,
@@ -69,7 +69,7 @@ public class UniversityService
         return toDto; // Universities found
     }
 
-    public GetEducationDto? CreateUniversity(NewEducationDto newUniversityDto)
+    public GetUniversityDto? CreateUniversity(NewUniversityDto newUniversityDto)
     {
         var university = new University
         {
@@ -86,7 +86,7 @@ public class UniversityService
             return null; // University not created
         }
 
-        var toDto = new GetEducationDto
+        var toDto = new GetUniversityDto
         {
             Guid = createdUniversity.Guid,
             Code = createdUniversity.Code,
@@ -96,7 +96,7 @@ public class UniversityService
         return toDto; // University created
     }
 
-    public int UpdateUniversity(UpdateEducationDto updateUniversityDto)
+    public int UpdateUniversity(UpdateUniversityDto updateUniversityDto)
     {
         var isExist = _universityRepository.IsExist(updateUniversityDto.Guid);
         if (!isExist)

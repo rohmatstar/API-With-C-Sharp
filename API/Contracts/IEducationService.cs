@@ -1,4 +1,4 @@
-﻿using API.DTOs.Universities;
+﻿using API.DTOs.Educations;
 
 namespace API.Contracts;
 

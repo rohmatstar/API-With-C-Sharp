@@ -1,8 +1,8 @@
 ﻿using API.Models;
 
-namespace API.Contracts
+namespace API.Contracts;
+
+public interface IEmployeeRepository : IGeneralRepository<Employee>
 {
-    public interface IEmployeeRepository : IGeneralRepository<Employee>
-    {
-    }
+    IEnumerable<Employee> GetByName(string name);
 }
