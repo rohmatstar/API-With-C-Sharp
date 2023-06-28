@@ -9,6 +9,7 @@ using API.Utilities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Xml.Linq;
+using System.Security.Principal;
 
 
 namespace API.Controllers
@@ -34,41 +35,34 @@ namespace API.Controllers
         [HttpPost("forget-password")]
         public IActionResult ForgetPassword(ForgetPasswordDto forgetPasswordDto)
         {
-            var getAccount = _EmployeeService.GetByEmail(forgetPasswordDto.Email);
-            if (getAccount is null)
+            // Get Employee By Email
+            var getEmployee = _EmployeeService.GetByEmail(forgetPasswordDto.Email)!;
+            if (getEmployee is null)
             {
                 return NotFound(new ResponseHandler<ForgetPasswordDto>
                 {
-                    Code = StatusCodes.Status404NotFound,
+                    Code = StatusCodes.Status400BadRequest,
                     Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "No Account found with the given email"
+                    Message = "No Account Found"
                 });
             }
 
             // Generate OTP
-            Random random = new Random();
-            HashSet<int> uniqueDigits = new HashSet<int>();
+            int generatedOtp = _service.GenerateOtp();
 
-            while (uniqueDigits.Count < 6)
-            {
-                int digit = random.Next(0, 9);
-                uniqueDigits.Add(digit);
-            }
-
-            int generatedOtp = uniqueDigits.Aggregate(0, (acc, digit) => acc * 10 + digit);
-
-            // Get Account By Guid
-            var relatedAccount = _service.GetAccount(getAccount.Guid)!;
+            // Get Account By Employee.Guid
+            var getAccount = _service.GetAccount(getEmployee.Guid);
 
             // Update Otp, Expired Time, isUsed in Account
+            var otpExpiredTime = DateTime.Now.AddMinutes(5);
             var updateAccountDto = new UpdateAccountDto
             {
-                Guid = relatedAccount.Guid,
-                Password = relatedAccount.Password,
-                IsDeleted = (bool)relatedAccount.IsDeleted,
+                Guid = getAccount!.Guid,
+                Password = getAccount.Password,
+                IsDeleted = (bool)getAccount.IsDeleted,
                 Otp = generatedOtp,
                 IsUsed = false,
-                ExpiredTime = DateTime.Now.AddMinutes(5)
+                ExpiredTime = otpExpiredTime
             };
 
             var updateResult = _service.UpdateAccount(updateAccountDto);
@@ -87,14 +81,14 @@ namespace API.Controllers
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "Account found",
+                Message = "OTP Sent",
                 Data = new List<OtpResponseDto> { new OtpResponseDto {
                     Guid = getAccount.Guid,
-                    Email = getAccount.Email,
-                    Otp = generatedOtp
+                    Email = getEmployee.Email,
+                    Otp = generatedOtp,
+                    ExpiredTime = otpExpiredTime
                 } }
-            });
-
+            }) ;
         }
 
         [HttpPost("register")]

@@ -4,6 +4,7 @@ using API.DTOs.Employees;
 using API.Models;
 using API.Repositories;
 using API.Utilities.Enums;
+using System.Net;
 using System.Xml.Linq;
 
 namespace API.Services;
@@ -41,7 +42,6 @@ public class EmployeeService
 
         return toDto; // Employees found
     }
-
     public OtpResponseDto? GetByEmail(string email)
     {
         var account = _employeeRepository.GetAll()

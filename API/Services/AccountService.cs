@@ -5,6 +5,8 @@ using API.DTOs.Universities;
 using API.Models;
 using API.Repositories;
 using API.Utilities;
+using API.Utilities.Enums;
+using System.Net;
 
 namespace API.Services;
 
@@ -15,6 +17,22 @@ public class AccountService
     public AccountService(IAccountRepository accountRepository)
     {
         _accountRepository = accountRepository;
+    }
+
+    public int GenerateOtp()
+    {
+        Random random = new Random();
+        HashSet<int> uniqueDigits = new HashSet<int>();
+
+        while (uniqueDigits.Count < 6)
+        {
+            int digit = random.Next(0, 9);
+            uniqueDigits.Add(digit);
+        }
+
+        int generatedOtp = uniqueDigits.Aggregate(0, (acc, digit) => acc * 10 + digit);
+
+        return generatedOtp;
     }
 
     public IEnumerable<GetAccountDto>? GetAccount()
