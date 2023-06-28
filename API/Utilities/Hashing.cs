@@ -6,7 +6,7 @@ namespace API.Utilities
     {
         private static string GenerateSalt()
         {
-            return BCrypt.Net.BCrypt.GenerateSalt(24);
+            return BCrypt.Net.BCrypt.GenerateSalt(18);
 
         }
 

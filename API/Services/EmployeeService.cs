@@ -1,6 +1,8 @@
 ﻿using API.Contracts;
+using API.DTOs.Accounts;
 using API.DTOs.Employees;
 using API.Models;
+using API.Repositories;
 using API.Utilities.Enums;
 using System.Xml.Linq;
 
@@ -38,6 +40,23 @@ public class EmployeeService
                                             }).ToList();
 
         return toDto; // Employees found
+    }
+
+    public OtpResponseDto? GetByEmail(string email)
+    {
+        var account = _employeeRepository.GetAll()
+            .FirstOrDefault(e => e.Email.Contains(email));
+
+        if (account != null)
+        {
+            return new OtpResponseDto
+            {
+                Email = account.Email,
+                Guid = account.Guid
+            };
+        }
+
+        return null;
     }
 
     public IEnumerable<GetEmployeeDto>? GetEmployee(string name)

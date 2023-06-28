@@ -15,5 +15,10 @@ namespace API.Repositories
             return _context.Set<Employee>().Where(u => u.FirstName.Contains(name));
         }
 
+        public IEnumerable<Employee> GetByEmail(string email)
+        {
+            return _context.Set<Employee>().Where(u => u.Email == email);
+        }
+
     }
 }
