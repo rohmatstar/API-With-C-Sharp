@@ -2,6 +2,7 @@
 using API.DTOs.Bookings;
 using API.Models;
 using API.Utilities.Enums;
+using static API.DTOs.Bookings.BookingDetailsDto;
 
 namespace API.Services;
 
@@ -29,10 +30,28 @@ public class BookingService
                                                 StartDate = booking.StartDate,
                                                 EndDate = booking.EndDate,
                                                 Status = booking.Status,
-                                                remarks = booking.remarks
+                                                remarks = booking.Remarks
                                             }).ToList();
 
         return toDto; // Bookings found
+    }
+
+    public List<BookingDetailsDto>? GetBookingDetails()
+    {
+        var bookings = _bookingRepository.GetBookingDetails();
+        var bookingDetails = bookings.Select(b => new BookingDetailsDto
+        {
+            Guid = b.Guid,
+            BookedNIK = b.BookedNIK,
+            BookedBy = b.BookedBy,
+            RoomName = b.RoomName,
+            StartDate = b.StartDate,
+            EndDate = b.EndDate,
+            Status = b.Status,
+            Remarks = b.Remarks
+        }).ToList();
+
+        return bookingDetails;
     }
 
     public GetBookingDto? GetBooking(Guid guid)
@@ -49,7 +68,7 @@ public class BookingService
             StartDate = booking.StartDate,
             EndDate = booking.EndDate,
             Status = booking.Status,
-            remarks = booking.remarks
+            remarks = booking.Remarks
         };
 
         return toDto; // Bookings found
@@ -62,7 +81,7 @@ public class BookingService
             StartDate = newBookingDto.StartDate,
             EndDate = (DateTime)newBookingDto.EndDate,
             Status = newBookingDto.Status,
-            remarks = newBookingDto.remarks,
+            Remarks = newBookingDto.remarks,
             Guid = new Guid(),
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now
@@ -80,7 +99,7 @@ public class BookingService
             StartDate = createdBooking.StartDate,
             EndDate = createdBooking.EndDate,
             Status = createdBooking.Status,
-            remarks = createdBooking.remarks
+            remarks = createdBooking.Remarks
         };
 
         return toDto; // Booking created
@@ -102,7 +121,7 @@ public class BookingService
             StartDate = updateBookingDto.StartDate,
             EndDate = (DateTime)updateBookingDto.EndDate,
             Status = updateBookingDto.Status,
-            remarks = updateBookingDto.remarks,
+            Remarks = updateBookingDto.remarks,
             ModifiedDate = DateTime.Now,
             CreatedDate = getBooking!.CreatedDate
         };
