@@ -4,6 +4,7 @@ namespace API.DTOs.Universities;
 
 public class NewUniversityDto
 {
+    public Guid Guid { get; set; }
     [Required]
     public string Code { get; set; }
     [Required]

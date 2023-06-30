@@ -6,17 +6,35 @@ using API.Models;
 using API.Repositories;
 using API.Utilities;
 using API.Utilities.Enums;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
+using System.Security.Claims;
+using BCryptNet = BCrypt.Net.BCrypt;
+using Microsoft.Extensions.Configuration;
+using API.Controllers;
 
 namespace API.Services;
 
 public class AccountService
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IAccountRoleRepository _accountRoleRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public AccountService(IAccountRepository accountRepository)
+    private readonly IConfiguration _configuration;
+    private readonly ITokenHandler _tokenHandler;
+
+    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IAccountRoleRepository accountRoleRepository, IRoleRepository roleRepository, IConfiguration configuration, ITokenHandler tokenHandler)
     {
         _accountRepository = accountRepository;
+        _employeeRepository = employeeRepository;
+        _accountRoleRepository = accountRoleRepository;
+        _roleRepository = roleRepository;
+
+        _configuration = configuration;
+        _tokenHandler = tokenHandler;
     }
 
     public int GenerateOtp()
@@ -33,6 +51,48 @@ public class AccountService
         int generatedOtp = uniqueDigits.Aggregate(0, (acc, digit) => acc * 10 + digit);
 
         return generatedOtp;
+    }
+
+    public string Login(LoginDto loginDto)
+    {
+        var employees = _employeeRepository.GetAll();
+        var employee = employees.FirstOrDefault(e => e.Email == loginDto.Email);
+
+        if (employee != null)
+        {
+            var employeeGuid = employee.Guid;
+
+            var getAccount = GetAccount().FirstOrDefault(account =>
+                account != null && account.Guid == employeeGuid);
+
+            if (getAccount != null)
+            {
+                var accountRoles = _accountRoleRepository.GetAll().Where(ar => ar.AccountGuid == getAccount.Guid).ToList();
+                var roleNames = new List<string>();
+
+                foreach (var accountRole in accountRoles)
+                {
+                    var role = _roleRepository.GetByGuid(accountRole.RoleGuid);
+                    roleNames.Add(role.Name);
+                }
+
+                var roles = string.Join(", ", roleNames);
+
+                if (Hashing.ValidatePassword(loginDto.Password, getAccount.Password))
+                {
+                    var claims = new List<Claim>() {
+                        new Claim("NIK", employee.Nik),
+                        new Claim("FullName", $"{employee.FirstName} {employee.LastName}"),
+                        new Claim("Email", loginDto.Email),
+                        new Claim("Role", roles)};
+
+                    ITokenHandler tokenHandler = new TokenHandler(_configuration);
+                    var getToken = tokenHandler.GenerateToken(claims);
+                    return getToken;
+                }
+            }
+        }
+        return "0";
     }
 
     public IEnumerable<GetAccountDto>? GetAccount()

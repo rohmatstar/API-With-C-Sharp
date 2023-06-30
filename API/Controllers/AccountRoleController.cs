@@ -20,6 +20,10 @@ namespace API.Controllers
             _service = service;
         }
 
+        public AccountRoleController()
+        {
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {

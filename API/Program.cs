@@ -33,6 +33,8 @@ builder.Services.AddScoped<AccountRoleService>();
 builder.Services.AddScoped<RoomService>();
 builder.Services.AddScoped<RoleService>();
 
+builder.Services.AddScoped<ITokenHandler, TokenHandler>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

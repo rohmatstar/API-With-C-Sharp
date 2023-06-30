@@ -77,7 +77,8 @@ public class EducationService
             Major = newEducationDto.Major,
             Degree = newEducationDto.Degree,
             Gpa = newEducationDto.Gpa,
-            Guid = new Guid(),
+            Guid = newEducationDto.Guid,
+            UniversityGuid = new Guid(),
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now
         };

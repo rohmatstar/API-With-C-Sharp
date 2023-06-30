@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Xml.Linq;
 using System.Security.Principal;
-
+using API.DTOs.AccountRoles;
 
 namespace API.Controllers
 {
@@ -22,15 +22,16 @@ namespace API.Controllers
         private readonly EmployeeService _EmployeeService;
         private readonly EducationService _EducationService;
         private readonly UniversityService _UniversityService;
+        private readonly RoleService _RoleService;
 
-        public AccountController(AccountService service, EmployeeService employeeService, EducationService educationService, UniversityService universityService)
+        public AccountController(AccountService service, EmployeeService employeeService, EducationService educationService, UniversityService universityService, RoleService roleService)
         {
             _service = service;
             _EmployeeService = employeeService;
             _EducationService = educationService;
             _UniversityService = universityService;
+            _RoleService = roleService;
         }
-
 
         [HttpPost("forget-password")]
         public IActionResult ForgetPassword(ForgetPasswordDto forgetPasswordDto)
@@ -114,32 +115,46 @@ namespace API.Controllers
                 registerEducation.Major = registerDto.Major;
                 registerEducation.Degree = registerDto.Degree;
                 registerEducation.Gpa = registerDto.Gpa;
+                registerEducation.Guid = CreateEmployee!.Guid;
 
                 var CreateEducation = _EducationService.CreateEducation(registerEducation);
                 var isEducationCreated = CreateEducation is not null;
 
                 if (isEducationCreated)
                 {
+                    // Account
+                    var registerAccount = new NewAccountDto();
+                    registerAccount.Password = registerDto.Password;
+                    registerAccount.Guid = CreateEducation!.UniversityGuid;
+                    registerAccount.IsDeleted = false;
+                    registerAccount.Otp = 0;
+                    registerAccount.IsUsed = false;
+                    registerAccount.ExpiredTime = DateTime.Now;
+
+                    var CreateAccount = _service.CreateAccount(registerAccount);
+                    var isAccountCreated = CreateAccount is not null;
+
                     // University
                     var registerUniversity = new NewUniversityDto();
                     registerUniversity.Code = registerDto.UniversityCode;
                     registerUniversity.Name = registerDto.UniversityName;
+                    registerUniversity.Guid = CreateEducation!.UniversityGuid;
 
                     var CreateUniversity = _UniversityService.CreateUniversity(registerUniversity);
                     var isUniversityCreated = CreateUniversity is not null;
 
-                    if (isUniversityCreated)
+                    if (isAccountCreated && isUniversityCreated)
                     {
-                        // Account
-                        var registerAccount = new NewAccountDto();
-                        registerAccount.Password = registerDto.Password;
 
-                        var CreateAccount = _service.CreateAccount(registerAccount);
-                        var isAccountCreated = CreateAccount is not null;
+                        // Account Roles
+                        var userRoleGuid = _RoleService.GetRole().FirstOrDefault(ur => ur.Name == "User");
+                        var registerAccountRoles = new NewAccountRoleDto();
+                        registerAccountRoles.AccountGuid = CreateAccount.Guid;
+                        registerAccountRoles.RoleGuid = userRoleGuid.Guid;
 
                         var isPasswordMatch = registerDto.Password == registerDto.ConfirmPassword;
 
-                        if (isAccountCreated && isPasswordMatch)
+                        if (isPasswordMatch)
                         {
                             return Ok(new ResponseHandler<RegisterDto>
                             {
@@ -161,6 +176,28 @@ namespace API.Controllers
             });
         }
 
+        [HttpPost("Login")]
+        public IActionResult Login(LoginDto loginDto)
+        {
+            var loginStatus = _service.Login(loginDto);
+            if (loginStatus == "0")
+            {
+                return BadRequest(new ResponseHandler<GetAccountDto>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Login Failed"
+                });
+            }
+
+            return Ok(new ResponseHandler<dynamic>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Successfully created",
+                Data = new { token = loginStatus }
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {
