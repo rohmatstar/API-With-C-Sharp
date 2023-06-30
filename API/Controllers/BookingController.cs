@@ -44,12 +44,11 @@ namespace API.Controllers
         }
 
         [HttpGet("Details/{guid}")]
-        public IActionResult GetBookingDetailsByGuid(Guid guid)
+        public IActionResult GetBookingDetails(Guid guid)
         {
-            var bookingDetails = _service.GetBookingDetails();
-            var booking = bookingDetails.FirstOrDefault(b => b.Guid == guid);
+            var bookingDetails = _service.GetBookingDetailByGuid(guid);
 
-            if (booking == null)
+            if (bookingDetails == null)
             {
                 return NotFound(new ResponseHandler<GetBookingDto>
                 {
@@ -59,13 +58,14 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<IEnumerable<BookingDetailsDto>>
+            return Ok(new ResponseHandler<BookingDetailsDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Data found",
-                Data = (IEnumerable<BookingDetailsDto>)booking
+                Data = bookingDetails
             });
+
         }
 
 

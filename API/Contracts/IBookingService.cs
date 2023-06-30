@@ -6,5 +6,5 @@ namespace API.Contracts;
 public interface IBookingService
 {
     IEnumerable<GetBookingDto> GetBooking();
-    List<BookingDetailsDto>? GetBookingDetails();
+    IEnumerable<BookingDetailsDto>? GetBookingDetails();
 }

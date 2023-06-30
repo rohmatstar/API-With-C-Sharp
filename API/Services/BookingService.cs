@@ -2,6 +2,7 @@
 using API.DTOs.Bookings;
 using API.Models;
 using API.Utilities.Enums;
+using System;
 using static API.DTOs.Bookings.BookingDetailsDto;
 
 namespace API.Services;
@@ -52,6 +53,12 @@ public class BookingService
         }).ToList();
 
         return bookingDetails;
+    }
+
+    public BookingDetailsDto? GetBookingDetailByGuid(Guid guid)
+    {
+        var relatedBooking = GetBookingDetails().FirstOrDefault(b => b.Guid == guid);
+        return relatedBooking;
     }
 
     public GetBookingDto? GetBooking(Guid guid)
