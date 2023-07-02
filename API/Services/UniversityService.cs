@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.DTOs.Universities;
 using API.Models;
+using System.Xml.Linq;
 
 namespace API.Services;
 
@@ -31,6 +32,29 @@ public class UniversityService
 
         return toDto; // Universities found
     }
+
+    public IEnumerable<GetUniversityDto> GetByCodeAndName(string code, string name)
+    {
+        var universities = _universityRepository.GetAll()
+            .Where(u => u.Code.Equals(code, StringComparison.OrdinalIgnoreCase) && u.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (universities.Count == 0)
+        {
+            return Enumerable.Empty<GetUniversityDto>(); // No universities found
+        }
+
+        var toDto = universities.Select(university =>
+            new GetUniversityDto
+            {
+                Guid = university.Guid,
+                Code = university.Code,
+                Name = university.Name
+            });
+
+        return toDto; // Universities found
+    }
+
 
     public IEnumerable<GetUniversityDto>? GetUniversity(string name)
     {

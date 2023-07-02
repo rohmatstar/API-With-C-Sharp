@@ -11,6 +11,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Security.Principal;
 using API.DTOs.AccountRoles;
+using API.Repositories;
 
 namespace API.Controllers
 {
@@ -134,11 +135,22 @@ namespace API.Controllers
                     var CreateAccount = _service.CreateAccount(registerAccount);
                     var isAccountCreated = CreateAccount is not null;
 
-                    // University
+                    // University + Validation University
+                    var isUniversityExist = _UniversityService.GetByCodeAndName(registerDto.UniversityCode, registerDto.UniversityName) is null;
+
+                    if (isUniversityExist)
+                    {
+                        return BadRequest(new ResponseHandler<RegisterDto>
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Status = HttpStatusCode.BadRequest.ToString(),
+                            Message = "Failed to register. Check your request"
+                        });
+                    }
+
                     var registerUniversity = new NewUniversityDto();
                     registerUniversity.Code = registerDto.UniversityCode;
                     registerUniversity.Name = registerDto.UniversityName;
-                    registerUniversity.Guid = CreateEducation!.UniversityGuid;
 
                     var CreateUniversity = _UniversityService.CreateUniversity(registerUniversity);
                     var isUniversityCreated = CreateUniversity is not null;

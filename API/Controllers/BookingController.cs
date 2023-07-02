@@ -68,6 +68,54 @@ namespace API.Controllers
 
         }
 
+        [HttpGet("duration")]
+        public IActionResult CalculateBookingLenght()
+        {
+            var entities = _service.BookingDuration();
+
+            if (entities == null)
+            {
+                return NotFound(new ResponseHandler<BookingDurationDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data not found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<BookingDurationDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data found",
+                Data = entities
+            });
+        }
+
+        [HttpGet("now")] // To get which rooms is being used today
+        public IActionResult GetBookingNow()
+        {
+            var entities = _service.BookingRoomToday();
+
+            if (entities == null)
+            {
+                return NotFound(new ResponseHandler<BookingRoomToday>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data not found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<BookingRoomToday>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data found",
+                Data = entities
+            });
+        }
+
 
         [HttpGet]
         public IActionResult GetAll()
