@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DbFiJSsv48lskpwBzKFSl9SviawnN83LUsB6plmcfa8=",
+  "Hash": "iGmdxbMJM5UKw+05Zls8t2psrAtL1rTf2C/vpSTdf6I=",
   "Source": "Client",
   "BasePath": "_content/Client",
   "Mode": "Default",
@@ -100,6 +100,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\js\\arrayjs.js",
+      "SourceId": "Client",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\",
+      "BasePath": "_content/Client",
+      "RelativePath": "js/arrayjs.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\arrayjs.js"
     },
     {
       "Identity": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\js\\latihan.js",

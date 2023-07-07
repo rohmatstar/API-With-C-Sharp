@@ -30,3 +30,4 @@ D:\-- METRODATA --\MCC\Programs\API-With-C-Sharp\Client\obj\Debug\net6.0\Client.
 D:\-- METRODATA --\MCC\Programs\API-With-C-Sharp\Client\obj\Debug\net6.0\Client.genruntimeconfig.cache
 D:\-- METRODATA --\MCC\Programs\API-With-C-Sharp\Client\obj\Debug\net6.0\ref\Client.dll
 D:\-- METRODATA --\MCC\Programs\API-With-C-Sharp\Client\obj\Debug\net6.0\scopedcss\Views\Shared\_LayoutLatihan.cshtml.rz.scp.css
+D:\-- METRODATA --\MCC\Programs\API-With-C-Sharp\Client\obj\Debug\net6.0\scopedcss\Views\Shared\_LayoutArrayJS.cshtml.rz.scp.css

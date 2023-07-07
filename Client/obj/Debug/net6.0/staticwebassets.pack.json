@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\js\\arrayjs.js",
+      "PackagePath": "staticwebassets\\js\\arrayjs.js"
+    },
+    {
       "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\js\\latihan.js",
       "PackagePath": "staticwebassets\\js\\latihan.js"
     },

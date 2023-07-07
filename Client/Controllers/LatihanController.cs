@@ -10,5 +10,10 @@ namespace Client.Controllers
         {
             return View();
         }
+
+        public IActionResult ArrayJS()
+        {
+            return View();
+        }
     }
 }
