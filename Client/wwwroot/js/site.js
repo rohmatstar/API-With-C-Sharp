@@ -326,3 +326,74 @@ function setGradientBackground(numColors) {
     // Return the array of gradient colors with text colors
     return gradientWithText;
 }
+
+// Data Table
+$(document).ready(function () {
+    $('#countriesTable').DataTable({
+        "ajax": {
+            "url": "https://restcountries.com/v3.1/all",
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "name.common" },
+            { "data": "name.official" },
+            /*{
+                "data": function (row) {
+                    if (row.independent) {
+                        return "independent"
+                    }
+                    return "";
+                }
+            },*/
+            /*{ "data": "unMember" },*/
+            {
+                "data": function (row) {
+                    if (row.currencies) {
+                        var currencyKeys = Object.keys(row.currencies);
+                        let currency = row.currencies[currencyKeys[0]].name.split(" ")[1];
+                        if (currency) return currency;
+                        // return row.currencies[currencyKeys[0]].name.split(" ")[1] + " " + row.currencies[currencyKeys[0]].symbol;
+                    }
+                    return "";
+                }
+            },
+            { "data": "capital[0]" },
+            { "data": "continents[0]" },
+            {
+                "data": function (row) {
+                    if (row.languages) {
+                        var langKeys = Object.keys(row.languages);
+                        return row.languages[langKeys[0]];
+                    }
+                    return "";
+                }
+            },
+            {
+                "data": function (row) {
+                    var latlng = row.latlng;
+                    if (latlng && latlng.length >= 2) {
+                        return parseInt(latlng[0]) + "&deg;BT, " + parseInt(latlng[1]) + "&deg; LS";
+                    }
+                    return "";
+                }
+            },
+            {
+                "data": function (row) {
+                    return row.population.toLocaleString().replaceAll(",",".") + " Jiwa";
+                }
+            },
+            {
+                "data": function (row) {
+                    var timezone = row.timezones[0];
+                    if (timezone && timezone.endsWith(":00")) {
+                        return timezone.substring(0, timezone.length - 3).replaceAll("UTC", "GMT");
+                    }
+                    else {
+                        return timezone.replaceAll("UTC", "GMT");
+                    }
+                    return "";
+                }
+            },
+        ]
+    });
+});

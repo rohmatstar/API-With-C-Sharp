@@ -20,5 +20,10 @@ namespace Client.Controllers
 		{
 			return View();
 		}
-	}
+
+        public IActionResult DataTable()
+        {
+            return View();
+        }
+    }
 }
