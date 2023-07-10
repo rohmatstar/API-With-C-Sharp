@@ -15,5 +15,10 @@ namespace Client.Controllers
         {
             return View();
         }
-    }
+
+		public IActionResult ConsumeAPI()
+		{
+			return View();
+		}
+	}
 }

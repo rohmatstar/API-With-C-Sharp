@@ -16,3 +16,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card{
+    /*cursor: pointer;*/
+}
+#poke-wrapper{
+    position: relative;
+    height: 120px;
+}
+img.poke{
+    height: 100%;
+    display: block;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+.modal-body{
+    max-height: 500px;
+    overflow: auto;
+}
