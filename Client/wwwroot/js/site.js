@@ -397,3 +397,42 @@ $(document).ready(function () {
         ]
     });
 });
+
+
+$(document).ready(function () {
+    $('#employeesTable').DataTable({
+        "ajax": {
+            "url": "https://localhost:7097/api/Employee",
+            "dataSrc": "data"
+        },
+        "columns": [
+            { "data": "nik" },
+            {
+                "data": function (row) {
+                    return row.firstName + " " + row.lastName
+                }
+            },
+            {
+                "data": function (row) {
+                    return moment(row.birthdate).format("D MMMM YYYY");
+                }
+            },
+            {
+                "data": function (row) {
+                    if (row.gender == "0") {
+                        return "Male"
+                    }
+                    else {
+                        return "Female"
+                    }
+                }
+            },
+            {
+                "data": function (row) {
+                    return moment(row.hiringDate).format("D MMMM YYYY");
+                } },
+            { "data": "email" },
+            { "data": "phoneNumber" },
+        ]
+    })
+})
