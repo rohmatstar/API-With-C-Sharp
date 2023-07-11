@@ -3,7 +3,9 @@
         <h5>Employees Data</h5>
     </div>
     <div class="col-6 text-end">
-        Button Insert
+        <button onclick="addEmployee()" class="btn btn-success btn-sm fw-bold">
+            <i class="bi bi-plus"></i> Add New Employee
+        </button>
     </div>
 </div>
 
@@ -22,3 +24,84 @@
     </thead>
     <tbody></tbody>
 </table>
+
+<div class="modal fade" id="modalEmployee" tabindex="-1" aria-labelledby="modalEmployeeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="employeeForm">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="modalEmployeeLabel"><span id="title-text">New</span> Employee</h3>
+                    <button type="button" class="btn text-danger" data-bs-dismiss="modal" aria-label="Close">
+                        <span id="close-text">Cancel</span>
+                    </button>
+
+                    <input type="hidden" value="" name="guid" id="guid" />
+                    <input type="hidden" value="" name="nik" id="nik" />
+                    <input type="hidden" value="save" name="action" id="action" />
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control text-capitalize" id="firstName" name="firstName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control text-capitalize" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="birthdate" class="form-label">Birthdate</label>
+                                <input type="date" class="form-control" id="birthDate" name="birthDate" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="hiredDate" class="form-label">Hired Date</label>
+                                <input type="date" class="form-control" id="hiringDate" name="hiringDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option selected value="0">Male</option>
+                                    <option value="1">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">+</div>
+                                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <span class="small fst-italic text-dark">*) All fields are required</span>
+                    <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

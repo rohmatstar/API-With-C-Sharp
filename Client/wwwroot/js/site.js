@@ -14,7 +14,7 @@ function getPoke(url) {
                 url: data.url
             }).done((res) => {
                 let gradient = setGradientBackground(2);
-                console.log(gradient)
+                //console.log(gradient)
                 let poke = `<div class="col-md-2 pe-0">
                 <div class="card mb-2">
                     <div id="poke-wrapper" class="card-body position-relative">
@@ -400,8 +400,10 @@ $(document).ready(function () {
 
 // Moment JS
 moment.locale('id');
+
+// Data table & Insert Data
 $(document).ready(function () {
-    $('#employeesTable').DataTable({
+    var table = $('#employeesTable').DataTable({
         "ajax": {
             "url": "https://localhost:7097/api/Employee",
             "dataSrc": "data"
@@ -484,14 +486,227 @@ $(document).ready(function () {
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<button class="btn btn-primary btn-sm edit-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit '+row.firstName+' '+ row.lastName + '"><i class="bi bi-pencil"></i></button>' +
-                        '<button class="btn btn-danger mx-1 btn-sm delete-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-trash"></i></button>' +
-                        '<button class="btn btn-info btn-sm details-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="See Details for ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-three-dots"></i></button>';
+                    return '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'edit\')" class="btn btn-primary btn-sm edit-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-pencil"></i></button>' +
+                        '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'delete\')" class="btn btn-danger mx-1 btn-sm delete-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-trash"></i></button>' +
+                        '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'detail\')" class="btn btn-info btn-sm details-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="See Details for ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-three-dots"></i></button>';
                 }
             }
         ]
-    })
+    });
+
+    // Submit Event (INSERT OPERATION)
+    $('#employeeForm').submit(function (event) {
+        event.preventDefault();
+        var formData = $(this).serializeArray();
+
+        //console.log(formData)
+
+        // Initialize Data
+        var employeeData = {
+            guid: '',
+            nik: '',
+            firstName: '',
+            lastName: '',
+            birthDate: '',
+            gender: 0,
+            hiringDate: '',
+            email: '',
+            phoneNumber: ''
+        };
+
+        //console.log(employeeData);
+
+        formData.forEach(field => {
+
+            // Data Mapping
+            if (field.name == "phoneNumber") {
+                employeeData[field.name] = '+' + field.value;
+            }
+            else if (field.name == "gender") {
+                employeeData[field.name] = parseInt(field.value);
+            }
+            else if (field.name == "birthDate" || field.name == "hiringDate") {
+                var originalDate = moment(field.value, "YYYY-MM-DD");
+                var date = originalDate.format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z";
+                employeeData[field.name] = date;
+            }
+            else {
+                employeeData[field.name] = field.value;
+            }
+
+            // Choose Action Save, Edit or Delete
+        });
+
+        formData.forEach(data => {
+            console.log("action", data)
+            if (data.name === 'action') {
+                //Edit 
+                if (data.value == "edit") {
+
+                    // Log the filtered object
+                    console.log("edit", employeeData)
+
+                    $.ajax({
+                        url: 'https://localhost:7097/api/Employee',
+                        method: 'PUT',
+                        data: JSON.stringify(employeeData),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            Swal.fire(
+                                'Updated!',
+                                'Employee Data Successfully Updated',
+                                'success'
+                            );
+                            $("#modalEmployee").modal('hide');
+
+                            // Reload Table to get fresh data
+                            table.ajax.reload();
+                        },
+                        error: function (error) {
+                            Swal.fire(
+                                'Error ' + error.responseJSON.status,
+                                error.responseJSON.title,
+                                'error'
+                            )
+                            //console.log("error", error.responseJSON.status)
+                        }
+                    });
+                }
+
+                // Save
+                else if (data.value == "save") {
+                    console.log("insert", employeeData)
+
+                    $.ajax({
+                        url: 'https://localhost:7097/api/Employee',
+                        method: 'POST',
+                        data: JSON.stringify(employeeData),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            Swal.fire(
+                                'Saved!',
+                                'New Employee Data Successfully Saved',
+                                'success'
+                            );
+                            $("#modalEmployee").modal('hide');
+
+                            // Reload Table to get fresh data
+                            table.ajax.reload();
+                        },
+                        error: function (error) {
+                            Swal.fire(
+                                'Error ' + error.responseJSON.status,
+                                error.responseJSON.title,
+                                'error'
+                            )
+                            //console.log("error", error.responseJSON.status)
+                        }
+                    });
+                }
+
+                // Delete
+                else if (data.value == "delete") {
+                    console.log("Delete", employeeData.guid)
+
+                    $.ajax({
+                        url: `https://localhost:7097/api/Employee/?guid=${employeeData.guid}`,
+                        method: 'DELETE',
+                        contentType: 'application/json',
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Employee Data Successfully Deleted',
+                                'success'
+                            );
+                            $("#modalEmployee").modal('hide');
+
+                            // Reload Table to get fresh data
+                            table.ajax.reload();
+                        },
+                        error: function (error) {
+                            Swal.fire(
+                                'Error ' + error.responseJSON.status,
+                                error.responseJSON.title,
+                                'error'
+                            )
+                            //console.log("error", error.responseJSON.status)
+                        }
+                    });
+                }
+            }
+        })
+    });
+
 })
+
+// INSERT MODAL
+function addEmployee() {
+    $("#modalEmployee").modal('show');
+    $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes").show();
+    $("#employeeForm").find("input, select, textarea").prop("disabled", false).val("");
+    $("#employeeForm #action").val("save")
+    $("#employeeForm #gender").val(0)
+    $("#title-text").html("New");
+    $("#close-text").html("Cancel");
+}
+
+// Detail Method (EDIT, DELETE, DETAIL)
+function detail(guid, nik, type) {
+    $("input#guid").val(guid);
+    $("input#nik").val(nik);
+    $("input#action").val(type);
+
+    if (type == "edit" || type == "delete" || type == "detail") {
+        $("#title-text").html("Detail");
+        $("#close-text").html("Close");
+    }
+    else {
+        $("#title-text").html("New");
+        $("#close-text").html("Cancel");
+    }
+
+    if (type == "delete" || type == "detail") {
+        $("#employeeForm").find("input:not([type=hidden]), select, textarea").prop("disabled", true);
+        if (type == "detail") {
+            $("#employeeForm").find("button[type=submit]").hide();
+        }
+        else {
+            $("#employeeForm").find("button[type=submit]").show();
+            $("#employeeForm").find("button[type=submit]").removeClass("btn-primary").addClass("btn-danger").text("Delete");
+        }
+    }
+    else {
+        $("#employeeForm").find("button[type=submit]").show();
+        $("#employeeForm").find("input, select, textarea").prop("disabled", false);
+        $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes");
+    }
+
+
+    $.ajax({
+        url: 'https://localhost:7097/api/Employee/' + guid,
+        method: 'GET',
+        success: function (response) {
+            console.log(response);
+            $('#modalEmployee').modal('show');
+
+            $('#firstName').val(response.data.firstName);
+            $('#lastName').val(response.data.lastName);
+            $('#birthDate').val(response.data.birthDate);
+            $("#hiringDate").val(moment(response.data.hiringDate).format("YYYY-MM-DD"));
+            $('#gender').val(response.data.gender);
+            $("#birthDate").val(moment(response.data.birthDate).format("YYYY-MM-DD"));
+            $('#phoneNumber').val(response.data.phoneNumber.slice(1));
+            $('#email').val(response.data.email);
+        },
+        error: function (error) {
+            Swal.fire(
+                'Error ' + error.responseJSON.status,
+                error.responseJSON.title,
+                'error'
+            )
+        }
+    });
+}
 
 // Enable Tooltips
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
