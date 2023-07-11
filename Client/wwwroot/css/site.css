@@ -66,3 +66,10 @@ img.poke{
     background-color: #6c757d !important;
     color: #fff;
 }
+div.dt-buttons{
+    text-align: center;
+    float: none;
+}
+#employeesTable tr th{
+    text-align: center;
+}

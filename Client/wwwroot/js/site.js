@@ -406,11 +406,15 @@ $(document).ready(function () {
             "url": "https://localhost:7097/api/Employee",
             "dataSrc": "data"
         },
-        "dom": "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+        "dom": "<'row'<'col'l><'col text-center'B><'col'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         buttons: [
-            'colvis',
+            {
+                extend: 'colvis',
+                text: 'Filter Columns',
+                className: 'btn btn-info'
+            },
             /*'copy',
             'csv',
             'excel',
@@ -418,27 +422,31 @@ $(document).ready(function () {
             'print'*/
             {
                 extend: 'copy',
-                text: 'Copy Data',
+                text: '<i class="bi bi-files"></i>',
                 className: 'btn btn-info'
             },
             {
-                extend: 'csv',
-                text: 'Export to CSV',
-                className: 'btn btn-primary'
-            },
-            {
-                extend: 'excel',
-                text: 'Export to Excel',
-                className: 'btn btn-success'
-            },
-            {
-                extend: 'pdf',
-                text: 'Export to PDF',
-                className: 'btn btn-danger'
+                extend: 'collection',
+                text: '<i class="bi bi-save"></i> Export',
+                className: 'btn btn-primary',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: '<i class="bi bi-file-earmark-spreadsheet"></i> Export to CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Export to Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bi bi-file-pdf"></i> Export to PDF'
+                    }
+                ]
             },
             {
                 extend: 'print',
-                text: 'Print',
+                text: '<i class="bi bi-printer"></i> ',
                 className: 'btn btn-secondary'
             }
         ],
@@ -469,9 +477,22 @@ $(document).ready(function () {
                 "data": function (row) {
                     // Moment JS Implemented
                     return moment(row.hiringDate).format("D MMMM YYYY");
-                } },
+                }
+            },
             { "data": "email" },
             { "data": "phoneNumber" },
+            {
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<button class="btn btn-primary btn-sm edit-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit '+row.firstName+' '+ row.lastName + '"><i class="bi bi-pencil"></i></button>' +
+                        '<button class="btn btn-danger mx-1 btn-sm delete-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-trash"></i></button>' +
+                        '<button class="btn btn-info btn-sm details-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="See Details for ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-three-dots"></i></button>';
+                }
+            }
         ]
     })
 })
+
+// Enable Tooltips
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

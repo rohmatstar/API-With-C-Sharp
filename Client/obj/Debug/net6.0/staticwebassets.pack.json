@@ -257,6 +257,70 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_1.13.5_css_jquery.dataTables.min.css",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_1.13.5_css_jquery.dataTables.min.css"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_1.13.5_js_jquery.dataTables.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_1.13.5_js_jquery.dataTables.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.colVis.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.colVis.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.html5.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.html5.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.print.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_buttons_2.0.1_js_buttons.print.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_buttons_2.4.0_css_buttons.dataTables.min.css",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_buttons_2.4.0_css_buttons.dataTables.min.css"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.datatables.net_buttons_2.4.0_js_dataTables.buttons.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.datatables.net_buttons_2.4.0_js_dataTables.buttons.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.jsdelivr.net_npm_bootstrap-icons@1.10.5_font_bootstrap-icons.css",
+      "PackagePath": "staticwebassets\\vendor\\cdn.jsdelivr.net_npm_bootstrap-icons@1.10.5_font_bootstrap-icons.css"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdn.jsdelivr.net_npm_moment@2.29.1_locale_id.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdn.jsdelivr.net_npm_moment@2.29.1_locale_id.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdnjs.cloudflare.com_ajax_libs_jszip_3.1.3_jszip.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdnjs.cloudflare.com_ajax_libs_jszip_3.1.3_jszip.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdnjs.cloudflare.com_ajax_libs_moment.js_2.29.1_moment.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdnjs.cloudflare.com_ajax_libs_moment.js_2.29.1_moment.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdnjs.cloudflare.com_ajax_libs_pdfmake_0.1.53_pdfmake.min.js",
+      "PackagePath": "staticwebassets\\vendor\\cdnjs.cloudflare.com_ajax_libs_pdfmake_0.1.53_pdfmake.min.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\cdnjs.cloudflare.com_ajax_libs_pdfmake_0.1.53_vfs_fonts.js",
+      "PackagePath": "staticwebassets\\vendor\\cdnjs.cloudflare.com_ajax_libs_pdfmake_0.1.53_vfs_fonts.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\code.jquery.com_jquery-3.5.1.js",
+      "PackagePath": "staticwebassets\\vendor\\code.jquery.com_jquery-3.5.1.js"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\fonts\\bootstrap-icons.woff",
+      "PackagePath": "staticwebassets\\vendor\\fonts\\bootstrap-icons.woff"
+    },
+    {
+      "Id": "D:\\-- METRODATA --\\MCC\\Programs\\API-With-C-Sharp\\Client\\wwwroot\\vendor\\fonts\\bootstrap-icons.woff2",
+      "PackagePath": "staticwebassets\\vendor\\fonts\\bootstrap-icons.woff2"
+    },
+    {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.Client.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
