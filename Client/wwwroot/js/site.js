@@ -398,15 +398,52 @@ $(document).ready(function () {
     });
 });
 
-
+// Moment JS
+moment.locale('id');
 $(document).ready(function () {
     $('#employeesTable').DataTable({
         "ajax": {
             "url": "https://localhost:7097/api/Employee",
             "dataSrc": "data"
         },
+        "dom": "<'row'<'col-sm-9'B><'col-sm-3'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        buttons: [
+            'colvis',
+            /*'copy',
+            'csv',
+            'excel',
+            'pdf',
+            'print'*/
+            {
+                extend: 'copy',
+                text: 'Copy Data',
+                className: 'btn btn-info'
+            },
+            {
+                extend: 'csv',
+                text: 'Export to CSV',
+                className: 'btn btn-primary'
+            },
+            {
+                extend: 'excel',
+                text: 'Export to Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdf',
+                text: 'Export to PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                className: 'btn btn-secondary'
+            }
+        ],
         "columns": [
-            { "data": "nik" },
+            { "data": "nik", "visible": true },
             {
                 "data": function (row) {
                     return row.firstName + " " + row.lastName
@@ -414,7 +451,8 @@ $(document).ready(function () {
             },
             {
                 "data": function (row) {
-                    return moment(row.birthdate).format("D MMMM YYYY");
+                    // Moment JS Implemented
+                    return moment(row.birthDate).format("D MMMM YYYY");
                 }
             },
             {
@@ -429,6 +467,7 @@ $(document).ready(function () {
             },
             {
                 "data": function (row) {
+                    // Moment JS Implemented
                     return moment(row.hiringDate).format("D MMMM YYYY");
                 } },
             { "data": "email" },

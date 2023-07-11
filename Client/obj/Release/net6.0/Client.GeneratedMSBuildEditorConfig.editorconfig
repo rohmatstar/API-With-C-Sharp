@@ -32,12 +32,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGF0aWhhblxDb25zdW1lQVBJLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/-- METRODATA --/MCC/Programs/API-With-C-Sharp/Client/Views/Latihan/DataTable - Copy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGF0aWhhblxEYXRhVGFibGUgLSBDb3B5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/-- METRODATA --/MCC/Programs/API-With-C-Sharp/Client/Views/Latihan/DataTable.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGF0aWhhblxEYXRhVGFibGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/-- METRODATA --/MCC/Programs/API-With-C-Sharp/Client/Views/Latihan/DataTableLocal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGF0aWhhblxEYXRhVGFibGVMb2NhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/-- METRODATA --/MCC/Programs/API-With-C-Sharp/Client/Views/Latihan/Index.cshtml]
