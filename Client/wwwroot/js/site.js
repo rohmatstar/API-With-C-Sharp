@@ -800,5 +800,291 @@ function setActionType(actionType) {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
- 
+    /* ================================= CHART JS ===================================== */
+
+    
+    // University Chart
+    const univLabels = [];
+    const univData = {
+        labels: univLabels,
+        datasets: [{
+            label: 'University',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    let universityChart = new Chart("univChart", {
+        type: 'bar',
+        data: univData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Count University Data'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'University Code'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
+                    min: 0,
+                    ticks: {
+                        // forces step size to be 50 units
+                        stepSize: 1
+                    }
+                }
+            }
+        },
+    });
+
+    $.ajax({
+        url: baseUrl + 'University/',
+        method: 'GET',
+        success: function (response) {
+            console.log("univ", response)
+            //labels.push(response.data[0].code);
+
+            for (let i = 0; i < response.data.length; i++) {
+                if (!univLabels.includes(response.data[i].code)) {
+                    univData.datasets[0].data.push(1)
+                    univLabels.push(response.data[i].code)
+                }
+                else {
+                    let index = univLabels.findIndex(univ => univ === response.data[i].code);
+                    univData.datasets[0].data[index] = univData.datasets[0].data[index] + 1;
+                }
+            }
+
+            console.log(univLabels, univData)
+
+            //data.dataset[0].data = univData;
+            universityChart.update();
+        },
+        error: function (error) {
+            Swal.fire(
+                'Error ' + error.responseJSON.status,
+                error.responseJSON.title,
+                'error'
+            )
+        }
+    });
+
+    // Gender CHart
+    const genderLabels = [];
+    const genderData = {
+        labels: genderLabels,
+        datasets: [{
+            label: 'Employee Gender Population (%)',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    let genderChart = new Chart("genderChart", {
+        type: 'pie',
+        data: genderData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Count Gender Population (%)'
+                }
+            }
+        },
+    });
+
+    $.ajax({
+        url: baseUrl + 'Employee/',
+        method: 'GET',
+        success: function (response) {
+            console.log("genderResponse", response)
+            let gen;
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].gender == 1) {
+                    gen = "Female"
+                }
+                else {
+                    gen = "Male";
+                }
+
+                if (!genderLabels.includes(gen)) {
+                    genderData.datasets[0].data.push(1)
+                    genderLabels.push(gen)
+                }
+                else {
+                    let index = genderLabels.findIndex(gender => gender ===  gen);
+                    genderData.datasets[0].data[index] = genderData.datasets[0].data[index] + 1;
+                }
+            }
+
+            genderData.datasets[0].data[0] = parseInt((genderData.datasets[0].data[0] / response.data.length) * 100)
+            genderData.datasets[0].data[1] = parseInt((genderData.datasets[0].data[1] / response.data.length) * 100)
+
+            console.log("gender", genderLabels, genderData)
+
+            //data.dataset[0].data = univData;
+            genderChart.update();
+        },
+        error: function (error) {
+            Swal.fire(
+                'Error ' + error.responseJSON.status,
+                error.responseJSON.title,
+                'error'
+            )
+        }
+    });
+
+    // University Line Chart
+
+    const univLineLabels = [];
+    const univLineData = {
+        labels: univLineLabels,
+        datasets: [{
+            label: 'University',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    let universityLineChart = new Chart("univLineChart", {
+        type: 'line',
+        data: univLineData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Count University Data'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'University Code'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
+                    min: 0,
+                    ticks: {
+                        // forces step size to be 50 units
+                        stepSize: 1
+                    }
+                }
+            }
+        },
+    });
+
+    $.ajax({
+        url: baseUrl + 'University/',
+        method: 'GET',
+        success: function (response) {
+            console.log("univ", response)
+            //labels.push(response.data[0].code);
+
+            for (let i = 0; i < response.data.length; i++) {
+                if (!univLineLabels.includes(response.data[i].code)) {
+                    univLineData.datasets[0].data.push(1)
+                    univLineLabels.push(response.data[i].code)
+                }
+                else {
+                    let index = univLineLabels.findIndex(univ => univ === response.data[i].code);
+                    univLineData.datasets[0].data[index] = univLineData.datasets[0].data[index] + 1;
+                }
+            }
+
+            console.log("univLineData", univLineLabels, univLineData)
+
+            //data.dataset[0].data = univData;
+            universityLineChart.update();
+        },
+        error: function (error) {
+            Swal.fire(
+                'Error ' + error.responseJSON.status,
+                error.responseJSON.title,
+                'error'
+            )
+        }
+    });
 //})
