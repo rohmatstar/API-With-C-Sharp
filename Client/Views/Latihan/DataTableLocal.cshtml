@@ -3,7 +3,7 @@
         <h5>Employees Data</h5>
     </div>
     <div class="col-6 text-end">
-        <button onclick="addEmployee()" class="btn btn-success btn-sm fw-bold">
+        <button onclick="add()" class="btn btn-success btn-sm fw-bold">
             <i class="bi bi-plus"></i> Add New Employee
         </button>
     </div>
@@ -36,21 +36,15 @@
                     </button>
 
                     <input type="hidden" value="" name="guid" id="guid" />
-                    <input type="hidden" value="" name="nik" id="nik" />
-                    <input type="hidden" value="save" name="action" id="action" />
+
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
+
+                    <div class="row" id="nik-wrapper">
+                        <div class="col-md-12">
                             <div class="mb-3">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control text-capitalize" id="firstName" name="firstName" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control text-capitalize" id="lastName" name="lastName" required>
+                                <label for="nik" class="form-label">NIK</label>
+                                <input type="text" readonly name="nik" id="nik" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -58,13 +52,28 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="birthdate" class="form-label">Birthdate</label>
+                                <label for="firstName" class="form-label">First Name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control text-capitalize" id="firstName" name="firstName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control text-capitalize" id="lastName" name="lastName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="birthdate" class="form-label">Birthdate<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="birthDate" name="birthDate" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="hiredDate" class="form-label">Hired Date</label>
+                                <label for="hiredDate" class="form-label">Hired Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="hiringDate" name="hiringDate" required>
                             </div>
                         </div>
@@ -73,7 +82,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
+                                <label for="gender" class="form-label">Gender<span class="text-danger">*</span></label>
                                 <select class="form-select" id="gender" name="gender" required>
                                     <option selected value="0">Male</option>
                                     <option value="1">Female</option>
@@ -82,7 +91,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
+                                <label for="phone" class="form-label">Phone<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-text">+</div>
                                     <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
@@ -92,13 +101,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <span class="small fst-italic text-dark">*) All fields are required</span>
-                    <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                    <span class="small fst-italic text-dark">*) Required</span>
+                    <button type="submit" data-action-type="1" class="btn btn-primary btn-sm">Save changes</button>
                 </div>
             </form>
 

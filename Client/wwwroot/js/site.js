@@ -398,11 +398,10 @@ $(document).ready(function () {
     });
 });
 
-// Moment JS
-moment.locale('id');
+
 
 // Data table & Insert Data
-$(document).ready(function () {
+//$(document).ready(function () {
     var table = $('#employeesTable').DataTable({
         "ajax": {
             "url": "https://localhost:7097/api/Employee",
@@ -417,11 +416,6 @@ $(document).ready(function () {
                 text: 'Filter Columns',
                 className: 'btn btn-info'
             },
-            /*'copy',
-            'csv',
-            'excel',
-            'pdf',
-            'print'*/
             {
                 extend: 'copy',
                 text: '<i class="bi bi-files"></i>',
@@ -453,7 +447,7 @@ $(document).ready(function () {
             }
         ],
         "columns": [
-            { "data": "nik", "visible": true },
+            { "data": "nik"},
             {
                 "data": function (row) {
                     return row.firstName + " " + row.lastName
@@ -461,7 +455,6 @@ $(document).ready(function () {
             },
             {
                 "data": function (row) {
-                    // Moment JS Implemented
                     return moment(row.birthDate).format("D MMMM YYYY");
                 }
             },
@@ -477,7 +470,6 @@ $(document).ready(function () {
             },
             {
                 "data": function (row) {
-                    // Moment JS Implemented
                     return moment(row.hiringDate).format("D MMMM YYYY");
                 }
             },
@@ -486,15 +478,123 @@ $(document).ready(function () {
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'edit\')" class="btn btn-primary btn-sm edit-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-pencil"></i></button>' +
-                        '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'delete\')" class="btn btn-danger mx-1 btn-sm delete-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-trash"></i></button>' +
-                        '<button onclick="detail(\'' + row.guid + '\', \'' + row.nik +'\', \'detail\')" class="btn btn-info btn-sm details-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="See Details for ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-three-dots"></i></button>';
+                    return '<button onclick="detail(\'' + row.guid + '\', ' + ActionType.Update + ')" class="btn btn-primary btn-sm edit-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-pencil"></i></button>' +
+                        '<button onclick="detail(\'' + row.guid + '\', ' + ActionType.Delete + ')" class="btn btn-danger mx-1 btn-sm delete-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-trash"></i></button>' +
+                        '<button onclick="detail(\'' + row.guid + '\', '+ActionType.Detail+')" class="btn btn-info btn-sm details-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="See Details for ' + row.firstName + ' ' + row.lastName + '"><i class="bi bi-three-dots"></i></button>';
                 }
             }
         ]
     });
 
-    // Submit Event (INSERT OPERATION)
+    /* ======================================== CRUD FUNCTIONS =================================== */
+
+    // CRUD ActionType
+    let ActionType = {
+        "Insert": 1,
+        "Update": 2,
+        "Delete": 3,
+        "Detail": 4
+    }
+    let baseUrl = 'https://localhost:7097/api/';
+
+    // Moment JS
+    moment.locale('id');
+
+    // SHOW HIDE MODAL
+    function showModal() {
+        $("#modalEmployee").modal('show');
+    }
+
+    function hideModal() {
+        $("#modalEmployee").modal('hide');
+    }
+
+    //CRUD BUTTON FUNCTION
+    function add() {
+        showModal();
+        $("#employeeForm")
+            .find("button[type=submit]")
+            .removeClass("btn-danger")
+            .addClass("btn-primary")
+            .text("Save changes")
+            .show();
+        $("#employeeForm")[0].reset();
+        $("#title-text").html("New");
+        $("#close-text").html("Cancel");
+
+        setActionType(ActionType.Insert);
+    }
+    function detail(guid, actionType) {
+        getEmployeeData(guid);
+        setActionType(actionType);
+    }
+
+    // GET DATA
+    function getEmployeeData(guid) {
+        $.ajax({
+            url: baseUrl + 'Employee/' + guid,
+            method: 'GET',
+            success: function (response) {
+                showModal();
+
+                $('#guid').val(response.data.guid);
+                $('#nik').val(response.data.nik);
+                $('#firstName').val(response.data.firstName);
+                $('#lastName').val(response.data.lastName);
+                $('#birthDate').val(response.data.birthDate);
+                $("#hiringDate").val(moment(response.data.hiringDate).format("YYYY-MM-DD"));
+                $('#gender').val(response.data.gender);
+                $("#birthDate").val(moment(response.data.birthDate).format("YYYY-MM-DD"));
+                $('#phoneNumber').val(response.data.phoneNumber.slice(1));
+                $('#email').val(response.data.email);
+            },
+            error: function (error) {
+                Swal.fire(
+                    'Error ' + error.responseJSON.status,
+                    error.responseJSON.title,
+                    'error'
+                )
+            }
+        });
+    }
+
+    // SET ACTION TYPE
+function setActionType(actionType) {
+    $("#employeeForm")
+        .find("button[type=submit]")
+        .attr("data-action-type", actionType)
+    $("#employeeForm #nik-wrapper").hide();
+
+        if (actionType != ActionType.Insert) {
+            $("#employeeForm #nik-wrapper").show();
+        }
+        if (actionType == ActionType.Insert || actionType == ActionType.Update) {
+            $("#employeeForm")
+                .find("button[type=submit]")
+                .removeClass("btn-danger")
+                .addClass("btn-primary")
+                .text("Save changes")
+                .show();
+            $("#employeeForm").find("input, select, textarea").prop("disabled", false);
+        }
+        else if (actionType == ActionType.Delete) {
+            $("#employeeForm")
+                .find("button[type=submit]")
+                .removeClass("btn-primary")
+                .addClass("btn-danger")
+                .text("Delete")
+                .show();
+            $("#employeeForm").find("input:not([type=hidden]), select, textarea").prop("disabled", true);
+        }
+        else {
+            $("#employeeForm")
+                .find("button[type=submit]")
+                .hide();
+            $("#employeeForm").find("input, select, textarea").prop("disabled", true);
+        }
+    }
+
+    // CRUD OPERATION
     $('#employeeForm').submit(function (event) {
         event.preventDefault();
         var formData = $(this).serializeArray();
@@ -533,181 +633,172 @@ $(document).ready(function () {
             else {
                 employeeData[field.name] = field.value;
             }
-
-            // Choose Action Save, Edit or Delete
         });
 
-        formData.forEach(data => {
-            console.log("action", data)
-            if (data.name === 'action') {
-                //Edit 
-                if (data.value == "edit") {
+        let actionType = $("#employeeForm")
+            .find("button[type=submit]")
+            .attr("data-action-type")
 
-                    // Log the filtered object
-                    console.log("edit", employeeData)
+        if (actionType == ActionType.Insert) {
+            $.ajax({
+                url: baseUrl + 'Employee',
+                method: 'POST',
+                data: JSON.stringify(employeeData),
+                contentType: 'application/json',
+                success: function () {
+                    Swal.fire(
+                        'Saved!',
+                        'New Employee Data Successfully Saved',
+                        'success'
+                    );
+                    hideModal()
 
-                    $.ajax({
-                        url: 'https://localhost:7097/api/Employee',
-                        method: 'PUT',
-                        data: JSON.stringify(employeeData),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            Swal.fire(
-                                'Updated!',
-                                'Employee Data Successfully Updated',
-                                'success'
-                            );
-                            $("#modalEmployee").modal('hide');
-
-                            // Reload Table to get fresh data
-                            table.ajax.reload();
-                        },
-                        error: function (error) {
-                            Swal.fire(
-                                'Error ' + error.responseJSON.status,
-                                error.responseJSON.title,
-                                'error'
-                            )
-                            //console.log("error", error.responseJSON.status)
-                        }
-                    });
+                    // Reload Table to get fresh data
+                    table.ajax.reload();
+                },
+                error: function (error) {
+                    Swal.fire(
+                        'Error ' + error.responseJSON.status,
+                        error.responseJSON.title,
+                        'error'
+                    )
+                    //console.log("error", error.responseJSON.status)
                 }
+            });
+        }
+        else if (actionType == ActionType.Update) {
+            console.log("edit", employeeData)
 
-                // Save
-                else if (data.value == "save") {
-                    console.log("insert", employeeData)
+            $.ajax({
+                url: 'https://localhost:7097/api/Employee',
+                method: 'PUT',
+                data: JSON.stringify(employeeData),
+                contentType: 'application/json',
+                success: function (response) {
+                    Swal.fire(
+                        'Updated!',
+                        'Employee Data Successfully Updated',
+                        'success'
+                    );
+                    hideModal()
 
-                    $.ajax({
-                        url: 'https://localhost:7097/api/Employee',
-                        method: 'POST',
-                        data: JSON.stringify(employeeData),
-                        contentType: 'application/json',
-                        success: function (response) {
-                            Swal.fire(
-                                'Saved!',
-                                'New Employee Data Successfully Saved',
-                                'success'
-                            );
-                            $("#modalEmployee").modal('hide');
-
-                            // Reload Table to get fresh data
-                            table.ajax.reload();
-                        },
-                        error: function (error) {
-                            Swal.fire(
-                                'Error ' + error.responseJSON.status,
-                                error.responseJSON.title,
-                                'error'
-                            )
-                            //console.log("error", error.responseJSON.status)
-                        }
-                    });
+                    // Reload Table to get fresh data
+                    table.ajax.reload();
+                },
+                error: function (error) {
+                    Swal.fire(
+                        'Error ' + error.responseJSON.status,
+                        error.responseJSON.title,
+                        'error'
+                    )
+                    //console.log("error", error.responseJSON.status)
                 }
+            });
+        }
+        else if (actionType == ActionType.Delete) {
+            console.log("Delete", employeeData.guid)
 
-                // Delete
-                else if (data.value == "delete") {
-                    console.log("Delete", employeeData.guid)
+            $.ajax({
+                url: `https://localhost:7097/api/Employee/?guid=${employeeData.guid}`,
+                method: 'DELETE',
+                contentType: 'application/json',
+                success: function (response) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Employee Data Successfully Deleted',
+                        'success'
+                    );
+                    hideModal();
 
-                    $.ajax({
-                        url: `https://localhost:7097/api/Employee/?guid=${employeeData.guid}`,
-                        method: 'DELETE',
-                        contentType: 'application/json',
-                        success: function (response) {
-                            Swal.fire(
-                                'Deleted!',
-                                'Employee Data Successfully Deleted',
-                                'success'
-                            );
-                            $("#modalEmployee").modal('hide');
-
-                            // Reload Table to get fresh data
-                            table.ajax.reload();
-                        },
-                        error: function (error) {
-                            Swal.fire(
-                                'Error ' + error.responseJSON.status,
-                                error.responseJSON.title,
-                                'error'
-                            )
-                            //console.log("error", error.responseJSON.status)
-                        }
-                    });
+                    // Reload Table to get fresh data
+                    table.ajax.reload();
+                },
+                error: function (error) {
+                    Swal.fire(
+                        'Error ' + error.responseJSON.status,
+                        error.responseJSON.title,
+                        'error'
+                    )
+                    //console.log("error", error.responseJSON.status)
                 }
-            }
-        })
+            });
+        }
     });
 
-})
 
-// INSERT MODAL
-function addEmployee() {
-    $("#modalEmployee").modal('show');
-    $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes").show();
-    $("#employeeForm").find("input, select, textarea").prop("disabled", false).val("");
-    $("#employeeForm #action").val("save")
-    $("#employeeForm #gender").val(0)
-    $("#title-text").html("New");
-    $("#close-text").html("Cancel");
-}
 
-// Detail Method (EDIT, DELETE, DETAIL)
-function detail(guid, nik, type) {
-    $("input#guid").val(guid);
-    $("input#nik").val(nik);
-    $("input#action").val(type);
-
-    if (type == "edit" || type == "delete" || type == "detail") {
-        $("#title-text").html("Detail");
-        $("#close-text").html("Close");
-    }
-    else {
+    // INSERT MODAL
+    /*function addEmployee() {
+        $("#modalEmployee").modal('show');
+        $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes").show();
+        $("#employeeForm").find("input, select, textarea").prop("disabled", false).val("");
+        $("#employeeForm #action").val("save")
+        $("#employeeForm #gender").val(0)
         $("#title-text").html("New");
         $("#close-text").html("Cancel");
-    }
+    }*/
 
-    if (type == "delete" || type == "detail") {
-        $("#employeeForm").find("input:not([type=hidden]), select, textarea").prop("disabled", true);
-        if (type == "detail") {
-            $("#employeeForm").find("button[type=submit]").hide();
+    // Detail Method (EDIT, DELETE, DETAIL)
+    /*function detail(guid, type) {
+        $("input#action").val(type);
+
+        if (type == "edit" || type == "delete" || type == "detail") {
+            $("#title-text").html("Detail");
+            $("#close-text").html("Close");
+        }
+        else {
+            $("#title-text").html("New");
+            $("#close-text").html("Cancel");
+        }
+
+        if (type == "delete" || type == "detail") {
+            $("#employeeForm").find("input:not([type=hidden]), select, textarea").prop("disabled", true);
+            if (type == "detail") {
+                $("#employeeForm").find("button[type=submit]").hide();
+            }
+            else {
+                $("#employeeForm").find("button[type=submit]").show();
+                $("#employeeForm").find("button[type=submit]").removeClass("btn-primary").addClass("btn-danger").text("Delete");
+            }
         }
         else {
             $("#employeeForm").find("button[type=submit]").show();
-            $("#employeeForm").find("button[type=submit]").removeClass("btn-primary").addClass("btn-danger").text("Delete");
+            $("#employeeForm").find("input, select, textarea").prop("disabled", false);
+            $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes");
         }
-    }
-    else {
-        $("#employeeForm").find("button[type=submit]").show();
-        $("#employeeForm").find("input, select, textarea").prop("disabled", false);
-        $("#employeeForm").find("button[type=submit]").removeClass("btn-danger").addClass("btn-primary").text("Save changes");
-    }
 
 
-    $.ajax({
-        url: 'https://localhost:7097/api/Employee/' + guid,
-        method: 'GET',
-        success: function (response) {
-            console.log(response);
-            $('#modalEmployee').modal('show');
+        $.ajax({
+            url: 'https://localhost:7097/api/Employee/' + guid,
+            method: 'GET',
+            success: function (response) {
+                console.log(response);
+                $('#modalEmployee').modal('show');
 
-            $('#firstName').val(response.data.firstName);
-            $('#lastName').val(response.data.lastName);
-            $('#birthDate').val(response.data.birthDate);
-            $("#hiringDate").val(moment(response.data.hiringDate).format("YYYY-MM-DD"));
-            $('#gender').val(response.data.gender);
-            $("#birthDate").val(moment(response.data.birthDate).format("YYYY-MM-DD"));
-            $('#phoneNumber').val(response.data.phoneNumber.slice(1));
-            $('#email').val(response.data.email);
-        },
-        error: function (error) {
-            Swal.fire(
-                'Error ' + error.responseJSON.status,
-                error.responseJSON.title,
-                'error'
-            )
-        }
-    });
-}
+                $('#guid').val(response.data.guid);
+                $('#nik').val(response.data.nik);
+                $('#firstName').val(response.data.firstName);
+                $('#lastName').val(response.data.lastName);
+                $('#birthDate').val(response.data.birthDate);
+                $("#hiringDate").val(moment(response.data.hiringDate).format("YYYY-MM-DD"));
+                $('#gender').val(response.data.gender);
+                $("#birthDate").val(moment(response.data.birthDate).format("YYYY-MM-DD"));
+                $('#phoneNumber').val(response.data.phoneNumber.slice(1));
+                $('#email').val(response.data.email);
+            },
+            error: function (error) {
+                Swal.fire(
+                    'Error ' + error.responseJSON.status,
+                    error.responseJSON.title,
+                    'error'
+                )
+            }
+        });
+    }*/
 
-// Enable Tooltips
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    // Enable Tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+ 
+//})
