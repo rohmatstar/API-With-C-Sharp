@@ -25,7 +25,7 @@ namespace API.Controllers
         {
             var entities = _service.GetUniversity();
 
-            if (!entities.Any())
+            if (entities is null)
             {
                 return NotFound(new ResponseHandler<GetUniversityDto>
                 {

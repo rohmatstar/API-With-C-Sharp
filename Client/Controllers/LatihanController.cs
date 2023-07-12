@@ -30,5 +30,10 @@ namespace Client.Controllers
         {
             return View();
         }
-    }
+
+		public IActionResult ChartVisualization()
+		{
+			return View();
+		}
+	}
 }
